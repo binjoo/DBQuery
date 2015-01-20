@@ -14,8 +14,7 @@ System.out.println(q.build());
 ```java
 DBQuery q = new DBQuery();
 String[] n = {"name", "username"};
-String[] p = {"pass", "password"};
-q.select("id", n, p).from("table_name");
+q.select("id", n, "pass as password").from("table_name");
 System.out.println(q.build());
 ```
 > `SQL: `select id , name as username , pass as password from table_name
@@ -24,9 +23,21 @@ System.out.println(q.build());
 ```java
 DBQuery q = new DBQuery();
 q.select("id", "name", "pass").from("table_name");
-q.where("age > 21").where("sex = ?", 2);
-System.out.println("`SQL: `" + q.build());
+q.where("age > 21 or age = ?", 18);
+q.where("sex = ?", "男");
+q.where("name like '%杰伦%'");
+q.where("name like '%' || ? || '%'", "周");
+System.out.println(q.build());
 ```
 
-> `SQL: `select id , name , pass from table_name where (age > 21) and (sex = ?)
-> `Params: `{ 2 }
+> `SQL: `select id , name , pass from table_name where (age > 21 or age = ?) and (sex = ?) and (name like '%杰伦%') and (name like '%' || ? || '%')
+> `Params: `{ 18, "男", "周" }
+
+#### 根据排序查询
+```java
+DBQuery q = new DBQuery();
+q.select("id", "name", "pass").from("table_name");
+q.order("id").order("name", DBQuery.SORT_DESC);
+System.out.println(q.build());
+```
+> `SQL: `select id , name , pass from table_name order by id asc, name desc
