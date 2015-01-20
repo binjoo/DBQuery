@@ -29,5 +29,4 @@ System.out.println("`SQL: `" + q.build());
 ```
 
 > `SQL: `select id , name , pass from table_name where (age > 21) and (sex = ?)
-
 > `Params: `{ 2 }
